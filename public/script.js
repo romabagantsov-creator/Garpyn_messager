@@ -202,3 +202,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Добавь эту функцию в конец файла script.js
+function markMessagesAsRead(from) {
+    socket.emit('mark-read', { from });
+}
+
+// Обнови socket.on('new-message') - добавь вызов markMessagesAsRead
+// Найди этот блок и добавь вызов функции:
+
+socket.on('new-message', (data) => {
+    if ((data.from === selectedUser && data.to === currentUser) || 
+        (data.from === currentUser && data.to === selectedUser)) {
+        displayMessage(data);
+        scrollToBottom();
+        
+        // Если сообщение от собеседника и мы в этом чате - отмечаем как прочитанное
+        if (data.from === selectedUser && data.to === currentUser) {
+            markMessagesAsRead(data.from);
+        }
+    }
+    
+    if (data.from !== currentUser && data.from !== selectedUser) {
+        showNotification(`Новое сообщение от ${data.from}`, 
+                         data.message || '📷 Изображение');
+    }
+});
+
+// Обнови selectUser - загружай историю и отмечай прочитанные
+function selectUser(user) {
+    selectedUser = user;
+    document.getElementById('selected-user-info').innerText = user;
+    document.getElementById('messages-list').innerHTML = '';
+    document.getElementById('typing-status').innerHTML = '';
+    socket.emit('get-history', user);
+    
+    // Отмечаем сообщения от этого пользователя как прочитанные
+    markMessagesAsRead(user);
+}
