@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Мой мессенджер</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div id="login" class="login-container">
+        <div class="login-box">
+            <h1>📱 Мой мессенджер</h1>
+            <input type="text" id="username" placeholder="Введите ваше имя" maxlength="20">
+            <button onclick="register()">Войти в чат</button>
+        </div>
+    </div>
+
+    <div id="chat" class="chat-container" style="display:none;">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3>👥 Онлайн</h3>
+                <span id="online-count" class="online-count">0</span>
+            </div>
+            <div class="current-user">
+                Вы: <strong id="current-user-name"></strong>
+            </div>
+            <ul id="users-list" class="users-list"></ul>
+        </div>
+        
+        <div class="chat-area">
+            <div class="chat-header">
+                <span>💬 Чат с</span>
+                <span id="selected-user-info" class="selected-user">—</span>
+            </div>
+            
+            <div id="messages" class="messages-area">
+                <div id="messages-list" class="messages-list"></div>
+                <div id="typing-status" class="typing-status"></div>
+            </div>
+            
+            <div class="input-area">
+                <input type="text" id="message-input" placeholder="Введите сообщение..." 
+                       onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()" class="btn-send">📤 Отправить</button>
+                <button onclick="document.getElementById('image-input').click()" class="btn-image">
+                    🖼️
+                </button>
+                <input type="file" id="image-input" accept="image/*" onchange="uploadImage(this)" style="display:none">
+                <div id="image-preview" class="image-preview"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/script.js"></script>
+</body>
+</html>
